@@ -42,10 +42,17 @@ const del = (id)=>{
 //   return await userController.create(userFields);
 // }
 
-const register = async (userFields) =>{
-  const eUser = await userController.read({email: userFields.email});
-  if(eUser.length) throw ({code: 400, message: "theis email already exist"});
-  return await userController.create(userFields);
+const register = async (data) =>{
+  const {email, password, firstName, lastName} = data;
+  if(!email || !password || !firstName || !lastName) 
+    throw ({code: 400, message: "missing data"});
+  
+    const existUser = await userController.readOne({email});
+    if(existUser) throw ({code: 405, message: "duplicate email"});
+
+    const user = await userController.create(data);
+    const token = createToken(user._id);
+    return token;
 }
 
 const login = async(email, password) => {
