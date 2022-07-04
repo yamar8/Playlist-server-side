@@ -1,7 +1,6 @@
 //Import the mongoose module
 const  mongoose = require ('mongoose');
 
-
 const MONGO_URL = process.env.MONGO_URL;
 
 //Set up default mongoose connection
