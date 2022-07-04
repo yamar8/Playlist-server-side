@@ -3,28 +3,32 @@ const router = express.Router();
 const userLogic = require("../BL/userLogic"); //import userLogic - all the CRUD function.
 const auth = require("../middleware/auth");
 
-router.all("/test",auth,(req,res)=>{
-  res.send("test");
-});
+// router.all("/test",auth,(req,res)=>{
+//   res.send("test");
+// });
 
 router.post("/login", async(req, res) => {
   try{
     const token = await userLogic.login(req.body.email, req.body.password);
     res.send({token});
   }catch(error){
-    console.log(error.message);
+    // console.log(error.message);
     res.status(500).send("sorry. something went wrong");
   }
 })
 
 router.post("/register", async(req, res) => {
   try{
-    const newUser = await userLogic.register(req.body);
-    console.log(newUser, "new user");
-    res.send("register");
+    const token = await userLogic.register(req.body);
+    res.status(200).send({token});
+
   }catch(error){
-    console.log(error.message);
-    res.status(500).send("sorry. something went wrong");
+    console.log("register", error.message);
+   if(error.code && error.code < 1000){
+    res.status(error.code).send(error.message);
+   }else{
+     res.send("sorry. something went wrong");
+   }
   }
 })
 
