@@ -17,8 +17,8 @@ const getItemById = async (id) => {
 }
 
 const getAllItems = async ()=>{
-        const items = await itemController.read({});
-        if(items.length === 0) throw ({code: 400, message: "there is no users"});
+        const items = await itemController.read();
+        if(items.length === 0) throw ({code: 400, message: "there is no items"});
         return items;
 }
 

@@ -3,9 +3,7 @@ const express = require("express");
 const router = express.Router(); 
 
 const itemLogic = require('../BL/itemLogic.js');
-
-
-
+const {auth} = require("../middleware/auth.js");
 
 
 router.get('/barcode', async (req, res) => {  //   ?barcode=566454
@@ -17,10 +15,10 @@ router.get('/barcode', async (req, res) => {  //   ?barcode=566454
     }
 });
 
-router.get('/', async (req, res) => {
-   try{
+router.get('/',auth, async (req, res) => {
+    console.log("req._id: ", req._id);
+    try{
        const items = await itemLogic.getAllItems();
-       console.log("items", items)
        res.send(items);
    } catch(error){
     res.status(error.code || 500).send({message: error.message || "Server Error"});
